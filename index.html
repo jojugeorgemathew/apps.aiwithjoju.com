@@ -1,1 +1,41 @@
-<h1>HI!</h1>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Apps By Joju</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header class="site-header">
+		<div class="container header-inner">
+			<h1 class="logo">Apps By Joju</h1>
+			<div class="controls">
+				<input id="search" class="search" type="search" placeholder="Search apps..." aria-label="Search apps">
+				<button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="hero">
+			<h2>Handcrafted web apps & utilities</h2>
+			<p class="tagline">Small, fast, and useful tools — built with care by Joju.</p>
+		</section>
+
+		<section>
+			<div id="appsGrid" class="apps-grid" aria-live="polite">
+				<!-- App cards injected by script.js -->
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p>&copy; <span id="year"></span> AI With Joju</p>
+		</div>
+	</footer>
+
+	<script src="script.js" defer></script>
+</body>
+</html>
