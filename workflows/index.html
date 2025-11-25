@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+        <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Workflows — Apps By Joju</title>
+        <link rel="stylesheet" href="../style.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <h1 class="logo">Apps By Joju</h1>
+            <div class="controls">
+                <input id="wf-search" class="search" type="search" placeholder="Search workflows..." aria-label="Search workflows">
+                <button id="themeToggle" class="theme-toggle" title="Toggle theme">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="workflow-hero">
+            <h2>Workflows</h2>
+            <p class="tagline">Create, organize and run your AI workflows. Fast, composable, and shareable.</p>
+        </section>
+
+        <section>
+            <div class="workflow-toolbar">
+                <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:200px">
+                    <button id="addWf" class="btn-primary">+ Add New Workflow</button>
+                    <span class="small-muted">Save workflows locally — they stay in your browser.</span>
+                </div>
+                <div style="min-width:220px">
+                    <input id="sortSelect" aria-label="Sort workflows" class="search" style="width:100%" placeholder="Filter by tag or title">
+                </div>
+            </div>
+
+            <div id="workflowsGrid" class="workflows-grid" aria-live="polite">
+                <!-- cards injected by script -->
+            </div>
+
+            <div id="empty" class="workflow-empty hidden">Click <strong>Add New Workflow</strong> to create a new workflow.</div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; <span id="year"></span> AI With Joju</p>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
