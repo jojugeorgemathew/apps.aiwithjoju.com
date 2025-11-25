@@ -1,7 +1,7 @@
 // Basic app data and UI interaction for Apps By Joju
 const apps = [
 
-	{id:'1',title:'Workflow Management',desc:'Create Workflows & flowcharts',tag:'Utility',url:'https://apps.aiwtihjoju.com/workflows/'},
+	{id:'1',title:'Workflow Management',desc:'Create Workflows & flowcharts',tag:'Utility',url:'https://apps.aiwithjoju.com/workflows/'},
 	{id:'2',title:'Color Mixer',desc:'Blend colors and export palettes',tag:'Design',url:'#'},
 	{id:'3',title:'JSON Formatter',desc:'Pretty-print and validate JSON',tag:'Utility',url:'#'},
 	{id:'4',title:'Todo Lite',desc:'Minimal, fast todo app',tag:'Productivity',url:'#'},
@@ -71,3 +71,4 @@ searchInput.addEventListener('input', handleSearch);
 yearEl.textContent = new Date().getFullYear();
 setupTheme();
 renderApps(apps);
+
