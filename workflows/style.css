@@ -4,11 +4,215 @@
 .workflow-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:18px 0;flex-wrap:wrap}
 .btn-primary{background:linear-gradient(90deg,#6d28d9,#1e40af);color:#fff;padding:10px 18px;border-radius:10px;border:0;font-weight:700;cursor:pointer;box-shadow:0 8px 25px rgba(29,78,216,0.18);transition:transform .18s,box-shadow .18s}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(29,78,216,0.25)}
+.btn-secondary{background:transparent;border:1px solid var(--muted);color:var(--muted);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:700;transition:all .18s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
 .workflows-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:12px}
 .workflow-card .meta-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .workflow-empty{padding:40px;text-align:center;color:var(--muted)}
 .small-muted{font-size:13px;color:var(--muted)}
 @media (max-width:600px){.workflow-toolbar{flex-direction:column;align-items:stretch}}
 
+/* Modal styles */
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:1;transition:opacity .3s}
+.modal.hidden{opacity:0;pointer-events:none}
+.modal.full-screen{align-items:stretch;justify-content:stretch;background:rgba(0,0,0,0.9)}
+.modal-content{background:var(--bg-1);color:var(--text-color);padding:30px;border-radius:12px;max-width:500px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.modal-content h2{margin:0 0 16px;font-size:22px}
+.modal-content input[type="text"]{width:100%;padding:12px;margin:0 0 16px;border:1px solid rgba(124,92,255,0.2);background:rgba(124,92,255,0.05);color:var(--text-color);border-radius:8px;font-size:14px}
+.modal-content input[type="text"]:focus{outline:none;border-color:var(--accent);background:rgba(124,92,255,0.1)}
+.modal-buttons{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* Canvas editor */
+.canvas-container{width:100%;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.canvas-toolbar{display:flex;gap:12px;align-items:center;padding:12px;background:linear-gradient(180deg, rgba(124,92,255,0.15), rgba(124,92,255,0.08));border-bottom:2px solid rgba(124,92,255,0.3);flex-wrap:wrap;z-index:100;overflow-x:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.tool-group{display:flex;gap:8px;align-items:center;padding:0 8px;border-right:1px solid rgba(124,92,255,0.2);white-space:nowrap;position:relative}
+.tool-group:last-child{border-right:none}
+
+/* Tool buttons with modern design */
+.tool-btn{background:linear-gradient(135deg, #f5f7fa, #e8ecf1);border:1px solid rgba(124,92,255,0.3);color:#333;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:18px;transition:all .2s ease;box-shadow:0 2px 6px rgba(0,0,0,0.08);font-weight:500}
+.tool-btn:hover{border-color:var(--accent);background:linear-gradient(135deg, #eff2f8, #e0e7f1);box-shadow:0 4px 12px rgba(124,92,255,0.2);transform:translateY(-2px)}
+.tool-btn:active{transform:translateY(0);box-shadow:0 2px 4px rgba(124,92,255,0.2)}
+.tool-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(124,92,255,0.4)}
+.tool-main{min-width:42px;height:42px;display:flex;align-items:center;justify-content:center}
+
+/* Dropdown system */
+.tool-dropdown{position:relative;display:inline-flex;align-items:center}
+.tool-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;background:#fff;border:1px solid rgba(124,92,255,0.25);border-radius:10px;padding:14px;min-width:220px;z-index:10000;box-shadow:0 12px 32px rgba(0,0,0,0.2);opacity:0;visibility:hidden;transform:translateY(-12px);transition:all .25s cubic-bezier(0.16, 1, 0.3, 1);margin-top:4px}
+.dropdown-menu label{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:12px;font-weight:600;color:#333}
+.dropdown-menu label:first-child{margin-top:0}
+.dropdown-menu label:last-child{margin-bottom:0}
+.dropdown-menu label span{min-width:50px}
+.dropdown-menu input[type="color"]{width:40px;height:36px;border:1px solid rgba(124,92,255,0.2);border-radius:6px;cursor:pointer;flex-shrink:0}
+.dropdown-menu input[type="range"]{flex:1;min-width:80px;cursor:pointer;height:6px;border-radius:3px;accent-color:#7c5cff}
+.dropdown-menu select{flex:1;padding:6px 8px;border:1px solid rgba(124,92,255,0.2);border-radius:6px;cursor:pointer;font-size:12px;background:#fafafa;color:#333}
+.size-value{font-size:11px;color:#666;font-weight:normal;min-width:24px;text-align:right}
+
+/* Dark mode dropdown */
+body:not(.light) .dropdown-menu{background:#1a1d2e;border-color:rgba(124,92,255,0.35);box-shadow:0 12px 32px rgba(0,0,0,0.4)}
+body:not(.light) .dropdown-menu label{color:#e0e0e0}
+body:not(.light) .dropdown-menu input[type="color"]{border-color:rgba(124,92,255,0.35)}
+body:not(.light) .dropdown-menu input[type="range"]{accent-color:#7c5cff}
+body:not(.light) .dropdown-menu select{background:#252a3e;color:#e0e0e0;border-color:rgba(124,92,255,0.35)}
+body:not(.light) .size-value{color:#a0a0a0}
+
+/* Canvas wrapper with scroll - accounts for bottom toolbar */
+.canvas-wrapper{flex:1;overflow:auto;position:relative;background:#fafafa;padding-bottom:60px}
+.light .canvas-wrapper{background:#f5f5f5}
+.canvas-wrapper::-webkit-scrollbar{width:10px;height:10px}
+.canvas-wrapper::-webkit-scrollbar-track{background:rgba(0,0,0,0.05)}
+.canvas-wrapper::-webkit-scrollbar-thumb{background:rgba(124,92,255,0.5);border-radius:5px;border:2px solid rgba(0,0,0,0.01)}
+.canvas-wrapper::-webkit-scrollbar-thumb:hover{background:rgba(124,92,255,0.7)}
+
+#drawingCanvas{display:block;background:#fff;width:1600px;height:1200px;image-rendering:pixelated;box-shadow:inset 0 0 20px rgba(0,0,0,0.05)}
+
+/* Grid background */
+.canvas-wrapper.show-grid #drawingCanvas{background-image:linear-gradient(rgba(124,92,255,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,0.08) 1px,transparent 1px);background-size:24px 24px}
+
+/* Color and size controls */
+#colorPicker{width:40px;height:40px;border:1px solid rgba(124,92,255,0.2);border-radius:6px;cursor:pointer;height:40px}
+#brushSize{width:80px}
+#gridSize{cursor:pointer}
+
+/* Bottom control bar */
+.canvas-controls-bottom{display:flex;justify-content:center;align-items:center;padding:12px;background:rgba(0,0,0,0.05);border-top:1px solid rgba(124,92,255,0.2);gap:16px;z-index:100}
+
+/* Zoom controls */
+.zoom-controls{display:flex;align-items:center;gap:8px}
+.zoom-btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;transition:all .18s}
+.zoom-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(124,92,255,0.3)}
+.zoom-btn:active{transform:scale(0.98)}
+.zoom-display{min-width:60px;text-align:center;font-weight:bold;color:var(--text-color);font-size:14px}
+.zoom-hint{font-size:12px;color:var(--muted);display:none}
+@media (min-width:1200px){.zoom-hint{display:inline}}
+
+/* Light mode for modals and canvas */
+.light .modal-content{background:var(--bg-1)}
+.light .canvas-toolbar{background:linear-gradient(180deg, rgba(109,40,217,0.12), rgba(109,40,217,0.06));border-bottom-color:rgba(109,40,217,0.3)}
+.light .tool-group{border-right-color:rgba(109,40,217,0.15)}
+.light .tool-btn{background:linear-gradient(135deg, #f8f9fb, #f0f3f8);border-color:rgba(109,40,217,0.25);color:#222}
+.light .tool-btn:hover{border-color:#6d28d9;background:linear-gradient(135deg, #f2f5fa, #eef2f8);box-shadow:0 4px 12px rgba(109,40,217,0.15)}
+.light .tool-btn.active{background:#6d28d9;color:#fff}
+.light #drawingCanvas{background:#fafafa}
+.light .canvas-wrapper{background:#f0f0f0}
+.light .canvas-controls-bottom{background:rgba(0,0,0,0.02)}
+.light .zoom-controls{color:#333}
+.light .dropdown-menu{background:#f8f8f8;border-color:rgba(109,40,217,0.2)}
+.light .dropdown-menu input[type="color"]{border-color:rgba(109,40,217,0.2)}
+.light .dropdown-menu select{background:#fff;border-color:rgba(109,40,217,0.2)}
+
 /* small utilities for the workflows page */
 .workflow-card .btn-edit, .workflow-card .btn-del{background:transparent;border:0;font-size:14px;cursor:pointer}
+
+/* ===== NEW TOOLBAR DESIGN ===== */
+.canvas-toolbar-modern{display:flex;align-items:center;gap:2px;padding:12px 16px;background:linear-gradient(180deg, rgba(124,92,255,0.12), rgba(124,92,255,0.06));border-bottom:2px solid rgba(124,92,255,0.25);overflow-x:auto;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08);flex-wrap:nowrap;white-space:nowrap}
+.toolbar-section{display:flex;align-items:center;gap:8px;padding:0 8px}
+.toolbar-divider{border-right:1px solid rgba(124,92,255,0.2);padding-right:12px}
+.toolbar-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin:0}
+.tool-group-modern{display:flex;align-items:center;gap:6px}
+.toolbar-spacer{flex:1;min-width:12px}
+
+.tool-btn-modern{background:linear-gradient(135deg, #f5f7fa, #e8ecf1);border:1px solid rgba(124,92,255,0.3);color:#333;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:16px;transition:all .2s cubic-bezier(0.16, 1, 0.3, 1);box-shadow:0 2px 4px rgba(0,0,0,0.08);font-weight:500;min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-btn-modern:hover{border-color:var(--accent);background:linear-gradient(135deg, #eff2f8, #e0e7f1);box-shadow:0 4px 10px rgba(124,92,255,0.18);transform:translateY(-1px)}
+.tool-btn-modern:active{transform:translateY(0);box-shadow:0 2px 4px rgba(124,92,255,0.2)}
+.tool-btn-modern.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(124,92,255,0.35)}
+
+.size-picker{display:flex;align-items:center;gap:6px;padding:0 4px}
+.size-picker input[type="range"]{width:80px;height:6px;border-radius:3px;accent-color:#7c5cff;cursor:pointer}
+.size-picker .size-value{font-size:11px;color:#666;font-weight:600;min-width:20px}
+
+.btn-primary-modern{background:linear-gradient(90deg,#6d28d9,#1e40af);color:#fff;padding:10px 18px;border-radius:8px;border:0;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(29,78,216,0.22);transition:all .2s;min-height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-primary-modern:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(29,78,216,0.28)}
+.btn-primary-modern:active{transform:translateY(0)}
+
+/* Canvas main wrapper with layers */
+.canvas-main-wrapper{display:flex;flex:1;gap:0;overflow:hidden}
+.canvas-wrapper{flex:1;overflow:auto;position:relative;background:#fafafa}
+.light .canvas-wrapper{background:#f5f5f5}
+
+/* Selection box for select tool */
+.selection-box{position:absolute;border:2px dashed rgba(124,92,255,0.6);background:rgba(124,92,255,0.08);box-shadow:inset 0 0 0 1px rgba(124,92,255,0.3);z-index:99;pointer-events:none;cursor:move;transition:all 0.1s}
+.selection-box.active{background:rgba(124,92,255,0.15);border-color:#7c5cff}
+
+/* Layers panel */
+.layers-panel{width:220px;background:var(--bg-1);border-left:1px solid rgba(124,92,255,0.2);padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;z-index:99;box-shadow:inset 2px 0 8px rgba(0,0,0,0.05)}
+.layers-panel h4{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--text-color);text-transform:uppercase;letter-spacing:0.5px}
+.layers-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.layer-item{display:flex;align-items:center;gap:6px;padding:8px;background:rgba(124,92,255,0.08);border:1px solid rgba(124,92,255,0.15);border-radius:6px;cursor:pointer;transition:all .15s;font-size:12px}
+.layer-item:hover{border-color:rgba(124,92,255,0.35);background:rgba(124,92,255,0.12)}
+.layer-item.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.layer-item input[type="checkbox"]{cursor:pointer;margin:0}
+.layer-btn{background:rgba(124,92,255,0.1);border:1px solid rgba(124,92,255,0.2);color:var(--text-color);padding:8px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;margin-top:auto}
+.layer-btn:hover{border-color:var(--accent);background:rgba(124,92,255,0.15)}
+
+.layers-panel.hidden{display:none}
+
+/* Shape grid modal */
+.modal-wide{max-width:800px;max-height:90vh;overflow-y:auto}
+.shape-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(60px,1fr));gap:12px;margin:20px 0}
+.shape-btn{padding:12px;border:2px solid rgba(124,92,255,0.2);background:rgba(124,92,255,0.05);border-radius:8px;cursor:pointer;font-size:24px;transition:all .2s;display:flex;align-items:center;justify-content:center;min-height:60px}
+.shape-btn:hover{border-color:var(--accent);background:rgba(124,92,255,0.15);transform:scale(1.05)}
+.shape-btn:active{transform:scale(0.95)}
+
+/* Dark/Light mode toolbar */
+.light .canvas-toolbar-modern{background:linear-gradient(180deg, rgba(109,40,217,0.1), rgba(109,40,217,0.05));border-bottom-color:rgba(109,40,217,0.2)}
+.light .toolbar-divider{border-right-color:rgba(109,40,217,0.15)}
+.light .tool-btn-modern{background:linear-gradient(135deg, #f8f9fb, #f0f3f8);border-color:rgba(109,40,217,0.25);color:#222}
+.light .tool-btn-modern:hover{border-color:#6d28d9;background:linear-gradient(135deg, #f2f5fa, #eef2f8);box-shadow:0 4px 10px rgba(109,40,217,0.15)}
+.light .tool-btn-modern.active{background:#6d28d9;color:#fff}
+.light .layers-panel{background:var(--bg-1);border-left-color:rgba(109,40,217,0.2)}
+.light .layer-item{background:rgba(109,40,217,0.1);border-color:rgba(109,40,217,0.15)}
+.light .layer-item:hover{border-color:rgba(109,40,217,0.35);background:rgba(109,40,217,0.12)}
+.light .layer-btn{background:rgba(109,40,217,0.1);border-color:rgba(109,40,217,0.2)}
+.light .layer-btn:hover{border-color:#6d28d9;background:rgba(109,40,217,0.15)}
+.light .shape-btn{border-color:rgba(109,40,217,0.2);background:rgba(109,40,217,0.05)}
+.light .shape-btn:hover{border-color:#6d28d9;background:rgba(109,40,217,0.15)}
+
+/* ===== SIMPLIFIED BOTTOM TOOLBAR ===== */
+.canvas-toolbar-bottom{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:flex-start;gap:4px;padding:10px 16px;background:linear-gradient(180deg, #1a1d2e, #0f111c);border-top:1px solid rgba(124,92,255,0.3);height:60px;z-index:100;box-shadow:0 -4px 16px rgba(0,0,0,0.3);overflow-x:auto}
+
+.tool-icon{background:transparent;border:1px solid rgba(124,92,255,0.4);color:#e0e0e0;width:40px;height:40px;padding:0;border-radius:6px;cursor:pointer;font-size:18px;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+.tool-icon:hover{border-color:var(--accent);background:rgba(124,92,255,0.15);color:#fff}
+
+.tool-icon:active{transform:scale(0.95)}
+
+.tool-icon.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 12px rgba(124,92,255,0.5)}
+
+.toolbar-divider{width:1px;height:30px;background:rgba(124,92,255,0.2);margin:0 4px}
+
+.color-input{width:40px;height:40px;border:1px solid rgba(124,92,255,0.4);border-radius:6px;cursor:pointer;padding:0;background:transparent;transition:all .2s}
+
+.color-input:hover{border-color:var(--accent);box-shadow:0 0 8px rgba(124,92,255,0.3)}
+
+.toolbar-spacer{flex:1;min-width:16px}
+
+.btn-save{background:linear-gradient(90deg,#6d28d9,#1e40af);color:#fff;padding:8px 16px;border:0;border-radius:6px;cursor:pointer;font-weight:700;transition:all .2s;height:40px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;box-shadow:0 4px 12px rgba(29,78,216,0.25)}
+
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(29,78,216,0.35)}
+
+.btn-save:active{transform:translateY(0)}
+
+/* Canvas wrapper adjustments for bottom toolbar */
+.canvas-wrapper{flex:1;overflow:auto;position:relative;background:#fafafa;margin-bottom:0}
+
+.canvas-container{width:100%;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+#drawingCanvas{display:block;background:#fff;width:1600px;height:1200px;image-rendering:pixelated;box-shadow:inset 0 0 20px rgba(0,0,0,0.05)}
+
+/* Light mode bottom toolbar */
+.light .canvas-toolbar-bottom{background:linear-gradient(180deg, #f8f9fb, #f0f3f8);border-top-color:rgba(109,40,217,0.25)}
+
+.light .tool-icon{border-color:rgba(109,40,217,0.35);color:#333}
+
+.light .tool-icon:hover{border-color:#6d28d9;background:rgba(109,40,217,0.12);color:#000}
+
+.light .tool-icon.active{background:#6d28d9;border-color:#6d28d9;color:#fff}
+
+.light .toolbar-divider{background:rgba(109,40,217,0.2)}
+
+.light .color-input{border-color:rgba(109,40,217,0.35)}
+
+.light .color-input:hover{border-color:#6d28d9;box-shadow:0 0 8px rgba(109,40,217,0.25)}
+
+

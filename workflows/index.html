@@ -28,7 +28,7 @@
             <div class="workflow-toolbar">
                 <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:200px">
                     <button id="addWf" class="btn-primary">+ Add New Workflow</button>
-                    <span class="small-muted">Save workflows locally — they stay in your browser.</span>
+                    <span class="small-muted">Workflows are saved in your browser.</span>
                 </div>
                 <div style="min-width:220px">
                     <input id="sortSelect" aria-label="Sort workflows" class="search" style="width:100%" placeholder="Filter by tag or title">
@@ -49,6 +49,82 @@
         </div>
     </footer>
 
+    <!-- Workflow Name Modal -->
+    <div id="nameModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Create New Workflow</h2>
+            <input id="workflowNameInput" type="text" placeholder="Enter workflow name..." autofocus>
+            <div class="modal-buttons">
+                <button id="cancelNameBtn" class="btn-secondary">Cancel</button>
+                <button id="confirmNameBtn" class="btn-primary">Create & Open Canvas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas Editor Modal -->
+    <div id="canvasModal" class="modal hidden full-screen">
+        <div class="canvas-container">
+            <!-- Canvas Title -->
+            <div class="canvas-header">
+                <h2 id="canvasTitle">Workflow Canvas</h2>
+            </div>
+            
+            <!-- Canvas Area -->
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="drawingCanvas"></canvas>
+            </div>
+
+            <!-- Bottom Toolbar -->
+            <div class="canvas-toolbar-bottom">
+                <button id="undoBtn" class="tool-icon" title="Undo">↶</button>
+                <button id="playBtn" class="tool-icon" title="Play">▶️</button>
+                <button id="flipBtn" class="tool-icon" title="Flip">↔️</button>
+                <button id="drawBtn" class="tool-icon active" title="Draw">✏️</button>
+                <button id="toolEraser" class="tool-icon" title="Eraser">🧻</button>
+                
+                <div class="toolbar-divider"></div>
+                
+                <input id="colorPicker" type="color" value="#000000" title="Color" class="color-input">
+                
+                <div class="toolbar-divider"></div>
+                
+                <button id="toolFill" class="tool-icon" title="Fill">🪣</button>
+                <button id="toolEyedropper" class="tool-icon" title="Color Picker">❤️</button>
+                <button id="toolText" class="tool-icon" title="Text">T</button>
+                <button id="toolSelect" class="tool-icon" title="Select">🖐️</button>
+                
+                <div class="toolbar-spacer"></div>
+                
+                <button id="moreBtn" class="tool-icon" title="More options">⋯</button>
+                
+                <div class="toolbar-spacer"></div>
+                
+                <button id="zoomOut" class="tool-icon" title="Zoom Out">🔍−</button>
+                <span id="zoomLevel" class="zoom-display">100%</span>
+                <button id="zoomIn" class="tool-icon" title="Zoom In">🔍+</button>
+                <button id="fullscreen" class="tool-icon" title="Fullscreen">⛶</button>
+                
+                <div class="toolbar-spacer"></div>
+                
+                <button id="saveCanvasBtn" class="btn-save">Save & Close</button>
+            </div>
+                    <button id="toolPen" class="tool-icon" style="display:none" title="Pen">✏️</button>
+                    <button id="toolLine" class="tool-icon" style="display:none" title="Line">📏</button>
+                    <button id="toolRect" class="tool-icon" style="display:none" title="Rectangle">▢</button>
+                    <button id="toolCircle" class="tool-icon" style="display:none" title="Circle">●</button>
+                    <button id="clearBtn" class="tool-icon" style="display:none" title="Clear">🗑️</button>
+                    <button id="gridToggleBtn" class="tool-icon" style="display:none" title="Grid">⊞</button>
+                    <input id="gridSize" style="display:none">
+                    <button id="flowModeBtn" style="display:none"></button>
+        </div>
+    </div>
+
     <script src="script.js" defer></script>
+        <script>
+        // Wrapper to catch and handle initialization errors
+        window.addEventListener('error', (e) => {
+            console.error('Error:', e.error);
+        });
+        </script>
 </body>
 </html>
