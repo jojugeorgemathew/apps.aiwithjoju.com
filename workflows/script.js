@@ -306,14 +306,17 @@ function startPosition(e) {
         saveState();
         isDrawing = false;
     } 
-    else if (currentTool === 'text') {
-        const text = prompt('Enter text:');
-        if (text) {
-            ctx.globalCompositeOperation = "source-over";
-            ctx.font = `${parseInt(brushSize.value) + 16}px system-ui, sans-serif`;
-            ctx.fillText(text, startX, startY);
-            saveState();
-        }
+   else if (currentTool === 'text') {
+        // Use custom prompt instead of built-in prompt()
+        showCustomPrompt('Add text to whiteboard:').then(text => {
+            if (text) {
+                ctx.globalCompositeOperation = "source-over";
+                ctx.font = `${parseInt(brushSize.value) + 16}px system-ui, sans-serif`;
+                ctx.fillStyle = colorPicker.value;
+                ctx.fillText(text, startX, startY);
+                saveState();
+            }
+        });
         isDrawing = false;
     }
 }
