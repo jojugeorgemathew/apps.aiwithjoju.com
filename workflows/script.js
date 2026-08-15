@@ -78,8 +78,10 @@ function makeCard(wf) {
     return el;
 }
 
-function removeWhiteboard(id) {
-    if (!confirm('Delete this whiteboard? This cannot be undone.')) return;
+async function removeWhiteboard(id) {
+    const confirmed = await showCustomConfirm('Delete this whiteboard? This cannot be undone.');
+    if (!confirmed) return;
+    
     const list = loadWhiteboards();
     const i = list.findIndex(x => x.id === id);
     if (i !== -1) { 
