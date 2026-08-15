@@ -468,3 +468,78 @@ function closeAndSaveCanvas() {
     canvasModal.classList.add('hidden');
     render(listFiltered()); // Refresh grid
 }
+
+
+// --- Custom Modal Prompts ---
+function showCustomPrompt(titleText) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('textModal');
+        const input = document.getElementById('customTextInput');
+        const titleEl = document.getElementById('textModalTitle');
+        const confirmBtn = document.getElementById('confirmTextBtn');
+        const cancelBtn = document.getElementById('cancelTextBtn');
+
+        titleEl.textContent = titleText;
+        input.value = '';
+        modal.classList.remove('hidden');
+        setTimeout(() => input.focus(), 50);
+
+        function cleanup() {
+            modal.classList.add('hidden');
+            confirmBtn.removeEventListener('click', onConfirm);
+            cancelBtn.removeEventListener('click', onCancel);
+            input.removeEventListener('keydown', onKey);
+        }
+
+        function onConfirm() {
+            const val = input.value.trim();
+            cleanup();
+            resolve(val || null);
+        }
+
+        function onCancel() {
+            cleanup();
+            resolve(null);
+        }
+
+        function onKey(e) {
+            if (e.key === 'Enter') onConfirm();
+            if (e.key === 'Escape') onCancel();
+        }
+
+        confirmBtn.addEventListener('click', onConfirm);
+        cancelBtn.addEventListener('click', onCancel);
+        input.addEventListener('keydown', onKey);
+    });
+}
+
+function showCustomConfirm(message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirmModal');
+        const msgEl = document.getElementById('confirmMessage');
+        const confirmBtn = document.getElementById('confirmConfirmBtn');
+        const cancelBtn = document.getElementById('cancelConfirmBtn');
+
+        msgEl.textContent = message;
+        modal.classList.remove('hidden');
+
+        function cleanup() {
+            modal.classList.add('hidden');
+            confirmBtn.removeEventListener('click', onConfirm);
+            cancelBtn.removeEventListener('click', onCancel);
+        }
+
+        function onConfirm() {
+            cleanup();
+            resolve(true);
+        }
+
+        function onCancel() {
+            cleanup();
+            resolve(false);
+        }
+
+        confirmBtn.addEventListener('click', onConfirm);
+        cancelBtn.addEventListener('click', onCancel);
+    });
+}
