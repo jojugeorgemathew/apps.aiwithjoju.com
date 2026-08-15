@@ -1,16 +1,16 @@
-// Wait for the HTML to fully load before running ANY JavaScript
+// This structure guarantees the code runs only when the HTML is fully ready
 document.addEventListener('DOMContentLoaded', () => {
     
-    // 1. Get Elements
+    // 1. Grab all elements from the HTML
     const form = document.getElementById('expenseForm');
-    const itemName = document.getElementById('itemName');
-    const itemPrice = document.getElementById('itemPrice');
-    const itemNotes = document.getElementById('itemNotes');
-    const listContainer = document.getElementById('expenseList');
-    const totalValue = document.getElementById('totalValue');
+    const itemNameInput = document.getElementById('itemName');
+    const itemPriceInput = document.getElementById('itemPrice');
+    const itemNotesInput = document.getElementById('itemNotes');
+    const expenseListContainer = document.getElementById('expenseList');
+    const totalValueDisplay = document.getElementById('totalValue');
     const themeBtn = document.getElementById('themeToggle');
 
-    // 2. Setup Theme (Checks saved preference)
+    // 2. Initialize Theme (Syncs with your main website's memory)
     let currentTheme = localStorage.getItem('aj_theme') || 'dark';
     if (currentTheme === 'light') {
         document.body.classList.add('light');
@@ -20,14 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
         themeBtn.textContent = '🌙';
     }
 
-    // Toggle Theme Button
     themeBtn.addEventListener('click', () => {
         const isLight = document.body.classList.toggle('light');
         localStorage.setItem('aj_theme', isLight ? 'light' : 'dark');
         themeBtn.textContent = isLight ? '🌞' : '🌙';
     });
 
-    // 3. Load Expenses from Local Storage safely
+    // 3. Load Expenses Safely
     let expenses = [];
     try {
         const savedData = localStorage.getItem('aj_expenses');
@@ -35,69 +34,90 @@ document.addEventListener('DOMContentLoaded', () => {
             expenses = JSON.parse(savedData);
         }
     } catch (error) {
+        console.error("Error loading expenses:", error);
         expenses = [];
     }
 
-    // 4. Render Expenses to screen
+    // Security function to prevent HTML injection in user notes
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
+    // 4. Function to Update the Screen
     function renderList() {
-        listContainer.innerHTML = ''; // Clear current list
+        expenseListContainer.innerHTML = ''; 
         let total = 0;
 
         if (expenses.length === 0) {
-            listContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No expenses yet.</p>';
-            totalValue.textContent = '0.00';
+            expenseListContainer.innerHTML = '<div class="empty-state">No expenses added yet. Add one to get started!</div>';
+            totalValueDisplay.textContent = '0.00';
             return;
         }
 
         expenses.forEach((expense, index) => {
-            total += expense.price;
+            total += Number(expense.price);
 
-            // Create item div
             const div = document.createElement('div');
             div.className = 'expense-item';
+            
+            // Note: NO dollar signs used here to ensure currency neutrality
             div.innerHTML = `
                 <div class="expense-info">
-                    <h4>${expense.name}</h4>
-                    <p>${expense.notes}</p>
+                    <h4>${escapeHTML(expense.name)}</h4>
+                    ${expense.notes ? `<p>${escapeHTML(expense.notes)}</p>` : ''}
                 </div>
                 <div class="expense-right">
-                    <span class="expense-price">$${expense.price.toFixed(2)}</span>
-                    <button class="delete-btn" data-id="${index}">&times;</button>
+                    <span class="expense-price">${Number(expense.price).toFixed(2)}</span>
+                    <button class="delete-btn" data-id="${index}" title="Delete Item">×</button>
                 </div>
             `;
-            listContainer.appendChild(div);
+            expenseListContainer.appendChild(div);
         });
 
-        // Update total
-        totalValue.textContent = total.toFixed(2);
+        // Update Total (No dollar sign)
+        totalValueDisplay.textContent = total.toFixed(2);
     }
 
-    // 5. Add New Expense
+    // 5. Handle Form Submission (Clicking "+ Add Expense")
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent page reload
+        e.preventDefault(); // Stops the page from refreshing
         
-        const nameVal = itemName.value.trim();
-        const priceVal = parseFloat(itemPrice.value);
-        const notesVal = itemNotes.value.trim();
+        const nameVal = itemNameInput.value.trim();
+        const priceVal = parseFloat(itemPriceInput.value);
+        const notesVal = itemNotesInput.value.trim();
 
+        // Extra check to ensure data is valid
         if (nameVal !== '' && !isNaN(priceVal)) {
-            expenses.push({ name: nameVal, price: priceVal, notes: notesVal });
+            // Save to memory array
+            expenses.push({ 
+                name: nameVal, 
+                price: priceVal, 
+                notes: notesVal 
+            });
+            
+            // Save to browser storage
             localStorage.setItem('aj_expenses', JSON.stringify(expenses));
-            form.reset(); // Clear form
-            renderList(); // Update UI
+            
+            // Reset form and update UI
+            form.reset(); 
+            itemNameInput.focus(); // Puts cursor back in the name box automatically
+            renderList(); 
         }
     });
 
-    // 6. Delete Expense (Using Event Delegation so it always works)
-    listContainer.addEventListener('click', (e) => {
+    // 6. Handle Deleting Items
+    expenseListContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const indexToDelete = e.target.getAttribute('data-id');
-            expenses.splice(indexToDelete, 1);
-            localStorage.setItem('aj_expenses', JSON.stringify(expenses));
+            expenses.splice(indexToDelete, 1); // Remove from array
+            localStorage.setItem('aj_expenses', JSON.stringify(expenses)); // Save new array
             renderList(); // Update UI
         }
     });
 
-    // 7. Initial Load
+    // 7. Initial Render when page loads
     renderList();
 });
