@@ -3,58 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
+    <title>Expense Tracker — Apps By Joju</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <a href="https://apps.aiwithjoju.com" class="back-link">&larr; Apps By Joju</a>
-        <button id="themeToggle" class="theme-btn">🌙</button>
+    <!-- Premium Header -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="https://apps.aiwithjoju.com" class="back-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Apps
+            </a>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+        </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container">
+    <main class="container main-content">
         <div class="title-section">
             <h1>Expense Tracker</h1>
             <p>Keep track of your spending effortlessly.</p>
         </div>
 
-        <div class="grid-layout">
+        <div class="tracker-layout">
             <!-- Form Section -->
-            <div class="card">
+            <div class="card form-card">
                 <h2>Add New Item</h2>
                 <form id="expenseForm">
                     <div class="input-group">
                         <label for="itemName">Item Name</label>
-                        <input type="text" id="itemName" placeholder="e.g., Coffee" required>
+                        <input type="text" id="itemName" placeholder="e.g., Coffee, Groceries" required>
                     </div>
                     <div class="input-group">
-                        <label for="itemPrice">Price ($)</label>
+                        <label for="itemPrice">Price</label>
                         <input type="number" id="itemPrice" step="0.01" placeholder="0.00" required>
                     </div>
                     <div class="input-group">
                         <label for="itemNotes">Notes (Optional)</label>
-                        <textarea id="itemNotes" placeholder="Add details..."></textarea>
+                        <textarea id="itemNotes" placeholder="Add any extra details..."></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">+ Add Expense</button>
+                    <!-- Upgraded Add Button -->
+                    <button type="submit" class="btn-primary">
+                        <span>+ Add Expense</span>
+                    </button>
                 </form>
             </div>
 
             <!-- List Section -->
-            <div class="card">
+            <div class="card list-card">
                 <div class="list-header">
                     <h2>Transactions</h2>
-                    <div class="total-badge">Total: $<span id="totalValue">0.00</span></div>
+                    <div class="total-badge">Total: <span id="totalValue">0.00</span></div>
                 </div>
                 <div id="expenseList" class="expense-list">
-                    <!-- Items go here -->
+                    <!-- Javascript will inject items here -->
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Script must match exactly -->
-    <script src="script.js"></script>
+    <!-- Load JavaScript properly -->
+    <script src="script.js" defer></script>
 </body>
 </html>
