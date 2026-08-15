@@ -256,8 +256,9 @@ function restoreState() {
     }
 }
 
-function clearCanvas() {
-    if (confirm('Are you sure you want to clear the entire whiteboard?')) {
+async function clearCanvas() {
+    const confirmed = await showCustomConfirm('Are you sure you want to clear the entire whiteboard?');
+    if (confirmed) {
         ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
         saveState();
     }
