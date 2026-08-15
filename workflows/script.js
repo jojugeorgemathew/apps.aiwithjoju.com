@@ -306,7 +306,7 @@ function startPosition(e) {
         saveState();
         isDrawing = false;
     } 
-   else if (currentTool === 'text') {
+    else if (currentTool === 'text') {
         showCustomPrompt('Add text to whiteboard:').then(text => {
             if (text) {
                 ctx.globalCompositeOperation = "source-over";
@@ -315,9 +315,6 @@ function startPosition(e) {
                 ctx.fillText(text, startX, startY);
                 saveState();
             }
-        });
-        isDrawing = false;
-    }
         });
         isDrawing = false;
     }
