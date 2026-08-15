@@ -61,6 +61,30 @@
         </div>
     </div>
 
+<!-- Custom Text Prompt Modal -->
+<div id="textModal" class="modal hidden">
+    <div class="modal-content">
+        <h2 id="textModalTitle">Enter Text</h2>
+        <input id="customTextInput" type="text" placeholder="Type here..." autofocus>
+        <div class="modal-buttons">
+            <button id="cancelTextBtn" class="btn-secondary">Cancel</button>
+            <button id="confirmTextBtn" class="btn-primary">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div id="confirmModal" class="modal hidden">
+    <div class="modal-content">
+        <h2>Are you sure?</h2>
+        <p id="confirmMessage" class="small-muted" style="margin: 15px 0; text-align: left;"></p>
+        <div class="modal-buttons">
+            <button id="cancelConfirmBtn" class="btn-secondary">Cancel</button>
+            <button id="confirmConfirmBtn" class="btn-primary" style="background: #e53935;">Confirm</button>
+        </div>
+    </div>
+</div>
+    
     <!-- Canvas Editor Modal -->
     <div id="canvasModal" class="modal hidden full-screen">
         <div class="canvas-container">
